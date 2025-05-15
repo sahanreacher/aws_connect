@@ -1,0 +1,306 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "518c0d12-57aa-4778-be19-7dfff1785f55",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": 40,
+      "y": 40
+    },
+    "ActionMetadata": {
+      "518c0d12-57aa-4778-be19-7dfff1785f55": {
+        "position": {
+          "x": 160.8,
+          "y": 38.4
+        },
+        "dynamicParams": []
+      },
+      "Agent and Customer Voice": {
+        "position": {
+          "x": 633.6,
+          "y": 57.6
+        },
+        "isFriendlyName": true
+      },
+      "9bf2a175-2471-4e89-8fab-c658179cad06": {
+        "position": {
+          "x": 424.8,
+          "y": 57.6
+        }
+      },
+      "778bb91e-ab31-4807-8db1-f326193edab7": {
+        "position": {
+          "x": 862.4,
+          "y": 51.2
+        },
+        "overrideConsoleVoice": true
+      },
+      "To MainIVR": {
+        "position": {
+          "x": 918.4,
+          "y": 333.6
+        },
+        "isFriendlyName": true,
+        "parameters": {
+          "ContactFlowId": {
+            "displayName": "${main_ivr_flow_name}"
+          }
+        },
+        "ContactFlow": {
+          "text": "${main_ivr_flow_name}"
+        }
+      },
+      "Landing_Fail_Exit_Flow": {
+        "position": {
+          "x": 153.6,
+          "y": 590.4
+        },
+        "isFriendlyName": true,
+        "dynamicParams": []
+      },
+      "49dc1422-21d3-4a33-86b1-e95e4044ea80": {
+        "position": {
+          "x": 672,
+          "y": 649.6
+        }
+      },
+      "Error occured": {
+        "position": {
+          "x": 400.8,
+          "y": 589.6
+        },
+        "isFriendlyName": true
+      },
+      "Dynamic Msg Lambda invoke": {
+        "position": {
+          "x": 157.6,
+          "y": 300.8
+        },
+        "isFriendlyName": true,
+        "parameters": {
+          "LambdaFunctionARN": {
+            "displayName": "${dynamic_config_lambda_name}"
+          }
+        },
+        "dynamicMetadata": {
+          "FlowName": false
+        }
+      },
+      "Landing_Exit_Flow": {
+        "position": {
+          "x": 676,
+          "y": 298.4
+        },
+        "isFriendlyName": true,
+        "dynamicParams": []
+      },
+      "set Prompt attributes": {
+        "position": {
+          "x": 408.8,
+          "y": 302.4
+        },
+        "isFriendlyName": true,
+        "dynamicParams": []
+      }
+    },
+    "Annotations": [],
+    "name": "defra-dev-connect-flow-Landing-001",
+    "description": "",
+    "type": "contactFlow",
+    "status": "PUBLISHED",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "Attributes": {
+          "FSS_Call_Disposition": "Landing_Enter_Flow"
+        },
+        "TargetContact": "Current"
+      },
+      "Identifier": "518c0d12-57aa-4778-be19-7dfff1785f55",
+      "Type": "UpdateContactAttributes",
+      "Transitions": {
+        "NextAction": "9bf2a175-2471-4e89-8fab-c658179cad06",
+        "Errors": [
+          {
+            "NextAction": "9bf2a175-2471-4e89-8fab-c658179cad06",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "RecordingBehavior": {
+          "RecordedParticipants": [
+            "Agent",
+            "Customer"
+          ],
+          "IVRRecordingBehavior": "Disabled"
+        }
+      },
+      "Identifier": "Agent and Customer Voice",
+      "Type": "UpdateContactRecordingBehavior",
+      "Transitions": {
+        "NextAction": "778bb91e-ab31-4807-8db1-f326193edab7"
+      }
+    },
+    {
+      "Parameters": {
+        "FlowLoggingBehavior": "Enabled"
+      },
+      "Identifier": "9bf2a175-2471-4e89-8fab-c658179cad06",
+      "Type": "UpdateFlowLoggingBehavior",
+      "Transitions": {
+        "NextAction": "Agent and Customer Voice"
+      }
+    },
+    {
+      "Parameters": {
+        "TextToSpeechVoice": "Amy",
+        "TextToSpeechEngine": "Neural",
+        "TextToSpeechStyle": "Newscaster"
+      },
+      "Identifier": "778bb91e-ab31-4807-8db1-f326193edab7",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Transitions": {
+        "NextAction": "Dynamic Msg Lambda invoke",
+        "Errors": [
+          {
+            "NextAction": "Dynamic Msg Lambda invoke",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "ContactFlowId": "${main_ivr_flow_id}"
+      },
+      "Identifier": "To MainIVR",
+      "Type": "TransferToFlow",
+      "Transitions": {
+        "NextAction": "Landing_Fail_Exit_Flow",
+        "Errors": [
+          {
+            "NextAction": "Landing_Fail_Exit_Flow",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Attributes": {
+          "FSS_Call_Disposition": "Landing_Fail_Exit_Flow"
+        },
+        "TargetContact": "Current"
+      },
+      "Identifier": "Landing_Fail_Exit_Flow",
+      "Type": "UpdateContactAttributes",
+      "Transitions": {
+        "NextAction": "Error occured",
+        "Errors": [
+          {
+            "NextAction": "Error occured",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "49dc1422-21d3-4a33-86b1-e95e4044ea80",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "Text": "We are sorry, there seems to be a problem and we are unable to take your call right now. You can find information about the Extended Packaging Reporting scheme at gov.uk, forward slash,  guidance, forward slash, report dash packaging dash data. Otherwise, we thank you for your patience, and request you call back later."
+      },
+      "Identifier": "Error occured",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "49dc1422-21d3-4a33-86b1-e95e4044ea80",
+        "Errors": [
+          {
+            "NextAction": "49dc1422-21d3-4a33-86b1-e95e4044ea80",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "LambdaFunctionARN": "${dynamic_config_lambda_id}",
+        "InvocationTimeLimitSeconds": "3",
+        "LambdaInvocationAttributes": {
+          "FlowName": "MainIVR"
+        },
+        "ResponseValidation": {
+          "ResponseType": "STRING_MAP"
+        }
+      },
+      "Identifier": "Dynamic Msg Lambda invoke",
+      "Type": "InvokeLambdaFunction",
+      "Transitions": {
+        "NextAction": "set Prompt attributes",
+        "Errors": [
+          {
+            "NextAction": "set Prompt attributes",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Attributes": {
+          "FSS_Call_Disposition": "Landing_Exit_Flow"
+        },
+        "TargetContact": "Current"
+      },
+      "Identifier": "Landing_Exit_Flow",
+      "Type": "UpdateContactAttributes",
+      "Transitions": {
+        "NextAction": "To MainIVR",
+        "Errors": [
+          {
+            "NextAction": "To MainIVR",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Attributes": {
+          "FSS_Closed_Msg": "$.External.FSS_Closed_Msg",
+          "FSS_Welcome_Msg": "$.External.FSS_Welcome_Msg",
+          "FSS_MainIVR_Msg": "$.External.FSS_MainIVR_Msg",
+          "FSS_Opt2_IVR_Msg": "$.External.FSS_Opt2_IVR_Msg",
+          "FSS_Account_Forced_Msg": "$.External.FSS_Account_Forced_Msg",
+          "FSS_Packaging_Forced_Msg": "$.External.FSS_Packaging_Forced_Msg",
+          "FSS_Payment_Forced_Msg": "$.External.FSS_Payment_Forced_Msg",
+          "FSS_Default_Forced_Msg": "$.External.FSS_Default_Forced_Msg",
+          "FSS_Error_Msg": "$.External.FSS_Error_Msg",
+          "FSS_Excess_Call_Volume_Msg": "$.External.FSS_Excess_Call_Volume_Msg",
+          "FSS_Qloop_Closed_Msg": "$.External.FSS_Qloop_Closed_Msg",
+          "FSS_Busy_Msg": "$.External.FSS_Busy_Msg"
+        },
+        "TargetContact": "Current"
+      },
+      "Identifier": "set Prompt attributes",
+      "Type": "UpdateContactAttributes",
+      "Transitions": {
+        "NextAction": "Landing_Exit_Flow",
+        "Errors": [
+          {
+            "NextAction": "Landing_Exit_Flow",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    }
+  ]
+}

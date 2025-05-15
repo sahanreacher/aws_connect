@@ -1,0 +1,291 @@
+{
+    "Version": "2019-10-30",
+    "StartAction": "Q message",
+    "Metadata": {
+      "entryPointPosition": {
+        "x": 242.4,
+        "y": 172
+      },
+      "ActionMetadata": {
+        "098007b7-e257-4b7c-9c3c-741d4680517d": {
+          "position": {
+            "x": 447.2,
+            "y": 105.6
+          },
+          "parameters": {
+            "Messages": [
+              null,
+              {
+                "PromptId": {}
+              }
+            ]
+          },
+          "audio": [
+            {
+              "id": "arn:aws:connect:eu-west-2:378989889082:instance/3f3879cf-bb5d-42d8-8498-1266a8055ea0/prompt/7f9b928c-25d1-44a0-9369-e62886b76650",
+              "type": "Prompt"
+            }
+          ]
+        },
+        "12d04774-b4c9-4a02-bbee-f17117a758f8": {
+          "position": {
+            "x": 1244.8,
+            "y": 111.2
+          },
+          "dynamicParams": []
+        },
+        "QLoopClosed": {
+          "position": {
+            "x": 1602.4,
+            "y": 132.8
+          },
+          "isFriendlyName": true
+        },
+        "dc55846a-5e44-4e2a-87dd-d071b578b543": {
+          "position": {
+            "x": 994.4,
+            "y": 153.6
+          }
+        },
+        "b4643acf-a358-456d-9dfc-806265128c2d": {
+          "position": {
+            "x": 2272,
+            "y": 347.2
+          }
+        },
+        "No agents": {
+          "position": {
+            "x": 1605.6,
+            "y": 328
+          },
+          "isFriendlyName": true
+        },
+        "d418a324-7abe-439e-9545-d577650a38d2": {
+          "position": {
+            "x": 997.6,
+            "y": 379.2
+          }
+        },
+        "Music WAV": {
+          "position": {
+            "x": 712.8,
+            "y": 366.4
+          },
+          "isFriendlyName": true,
+          "parameters": {
+            "PromptId": {
+              "displayName": "Music_Pop_ThisAndThatIsLife_Inst.wav"
+            }
+          },
+          "promptName": "Music_Pop_ThisAndThatIsLife_Inst.wav"
+        },
+        "Lambda Error": {
+          "position": {
+            "x": 1888,
+            "y": 596.8
+          },
+          "isFriendlyName": true
+        },
+        "Q message": {
+          "position": {
+            "x": 442.4,
+            "y": 296.8
+          },
+          "isFriendlyName": true
+        }
+      },
+      "Annotations": [],
+      "name": "defra-dev-connect-flow-FSSCustQ-001",
+      "description": "FSS Q flow",
+      "type": "customerQueue",
+      "status": "PUBLISHED",
+      "hash": {}
+    },
+    "Actions": [
+      {
+        "Parameters": {
+          "Messages": [
+            {
+              "Text": "Thank you for calling. Your call is very important to us and will be answered in the order it was received."
+            },
+            {
+              "PromptId": "arn:aws:connect:eu-west-2:378989889082:instance/3f3879cf-bb5d-42d8-8498-1266a8055ea0/prompt/7f9b928c-25d1-44a0-9369-e62886b76650"
+            }
+          ]
+        },
+        "Identifier": "098007b7-e257-4b7c-9c3c-741d4680517d",
+        "Type": "MessageParticipantIteratively",
+        "Transitions": {}
+      },
+      {
+        "Parameters": {
+          "Attributes": {
+            "FSS_Call_Disposition": "MainIVR_Qloop_OOH"
+          },
+          "TargetContact": "Current"
+        },
+        "Identifier": "12d04774-b4c9-4a02-bbee-f17117a758f8",
+        "Type": "UpdateContactAttributes",
+        "Transitions": {
+          "NextAction": "QLoopClosed",
+          "Errors": [
+            {
+              "NextAction": "QLoopClosed",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {
+          "Text": "$.Attributes.FSS_Qloop_Closed_Msg "
+        },
+        "Identifier": "QLoopClosed",
+        "Type": "MessageParticipant",
+        "Transitions": {
+          "NextAction": "b4643acf-a358-456d-9dfc-806265128c2d",
+          "Errors": [
+            {
+              "NextAction": "Lambda Error",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {},
+        "Identifier": "dc55846a-5e44-4e2a-87dd-d071b578b543",
+        "Type": "CheckHoursOfOperation",
+        "Transitions": {
+          "NextAction": "No agents",
+          "Conditions": [
+            {
+              "NextAction": "d418a324-7abe-439e-9545-d577650a38d2",
+              "Condition": {
+                "Operator": "Equals",
+                "Operands": [
+                  "True"
+                ]
+              }
+            },
+            {
+              "NextAction": "12d04774-b4c9-4a02-bbee-f17117a758f8",
+              "Condition": {
+                "Operator": "Equals",
+                "Operands": [
+                  "False"
+                ]
+              }
+            }
+          ],
+          "Errors": [
+            {
+              "NextAction": "No agents",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {},
+        "Identifier": "b4643acf-a358-456d-9dfc-806265128c2d",
+        "Type": "DisconnectParticipant",
+        "Transitions": {}
+      },
+      {
+        "Parameters": {
+          "Text": "$.Attributes.FSS_Error_Msg"
+        },
+        "Identifier": "No agents",
+        "Type": "MessageParticipant",
+        "Transitions": {
+          "NextAction": "b4643acf-a358-456d-9dfc-806265128c2d",
+          "Errors": [
+            {
+              "NextAction": "Lambda Error",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {
+          "MetricType": "NumberOfAgentsAvailable"
+        },
+        "Identifier": "d418a324-7abe-439e-9545-d577650a38d2",
+        "Type": "CheckMetricData",
+        "Transitions": {
+          "NextAction": "No agents",
+          "Conditions": [
+            {
+              "NextAction": "Q message",
+              "Condition": {
+                "Operator": "NumberGreaterThan",
+                "Operands": [
+                  "0"
+                ]
+              }
+            }
+          ],
+          "Errors": [
+            {
+              "NextAction": "No agents",
+              "ErrorType": "NoMatchingCondition"
+            },
+            {
+              "NextAction": "No agents",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {
+          "PromptId": "arn:aws:connect:eu-west-2:378989889082:instance/3f3879cf-bb5d-42d8-8498-1266a8055ea0/prompt/62c4b7c7-371b-47d7-969d-a784e132d6e2"
+        },
+        "Identifier": "Music WAV",
+        "Type": "MessageParticipant",
+        "Transitions": {
+          "NextAction": "dc55846a-5e44-4e2a-87dd-d071b578b543",
+          "Errors": [
+            {
+              "NextAction": "No agents",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {
+          "Text": "FSS_Error_Msg"
+        },
+        "Identifier": "Lambda Error",
+        "Type": "MessageParticipant",
+        "Transitions": {
+          "NextAction": "b4643acf-a358-456d-9dfc-806265128c2d",
+          "Errors": [
+            {
+              "NextAction": "b4643acf-a358-456d-9dfc-806265128c2d",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      },
+      {
+        "Parameters": {
+          "Text": "$.Attributes.FSS_Busy_Msg"
+        },
+        "Identifier": "Q message",
+        "Type": "MessageParticipant",
+        "Transitions": {
+          "NextAction": "Music WAV",
+          "Errors": [
+            {
+              "NextAction": "Lambda Error",
+              "ErrorType": "NoMatchingError"
+            }
+          ]
+        }
+      }
+    ]
+  }
